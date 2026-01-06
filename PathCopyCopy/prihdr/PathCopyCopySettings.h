@@ -82,6 +82,13 @@ namespace PCC
         bool            GetSubmenuPluginDisplayOrder(GUIDV& p_rvPluginIds) const;
         bool            GetKnownPlugins(GUIDV& p_rvPluginIds) const;
 
+        bool            GetWindows11MenuEnabled() const;
+        void            SetWindows11MenuEnabled(bool p_Enabled);
+        bool            GetWindows11QuickPlugin(GUID& p_rPluginId) const;
+        void            SetWindows11QuickPlugin(const GUID& p_PluginId);
+        bool            GetWindows11SubmenuPlugins(GUIDV& p_rvPluginIds) const;
+        void            SetWindows11SubmenuPlugins(const GUIDV& p_vPluginIds);
+
         bool            NeedsUpdateCheck() const;
         void            SetLastUpdateCheckNow();
 

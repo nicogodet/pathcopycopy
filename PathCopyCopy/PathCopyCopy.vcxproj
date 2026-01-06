@@ -350,6 +350,7 @@
     <ClCompile Include="src\PathCopyCopy.cpp" />
     <ClCompile Include="src\PathCopyCopyConfigHelper.cpp" />
     <ClCompile Include="src\PathCopyCopyContextMenuExt.cpp" />
+    <ClCompile Include="src\PathCopyCopyExplorerCommand.cpp" />
     <ClCompile Include="src\PathCopyCopyDataHandler.cpp" />
     <ClCompile Include="src\PathCopyCopyPluginsRegistry.cpp" />
     <ClCompile Include="src\PathCopyCopyRunDll32EntryPoints.cpp" />
@@ -408,6 +409,7 @@
     <None Include="rsrc\PathCopyCopy.rgs" />
     <None Include="rsrc\PathCopyCopyConfigHelper.rgs" />
     <None Include="rsrc\PathCopyCopyContextMenuExt.rgs" />
+    <None Include="rsrc\PathCopyCopyExplorerCommand.rgs" />
     <None Include="rsrc\PathCopyCopyDataHandler.rgs" />
   </ItemGroup>
   <ItemGroup>
@@ -431,6 +433,7 @@
     <ClInclude Include="prihdr\RegKey.h" />
     <ClInclude Include="prihdr\PathCopyCopyConfigHelper.h" />
     <ClInclude Include="prihdr\PathCopyCopyContextMenuExt.h" />
+    <ClInclude Include="prihdr\PathCopyCopyExplorerCommand.h" />
     <ClInclude Include="prihdr\PathCopyCopyDataHandler.h" />
     <ClInclude Include="prihdr\PathCopyCopyPluginsRegistry.h" />
     <ClInclude Include="prihdr\PathCopyCopyPrivateTypes.h" />

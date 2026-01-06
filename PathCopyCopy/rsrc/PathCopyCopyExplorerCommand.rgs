@@ -1,0 +1,55 @@
+HKCR
+{
+	PathCopyCopy.PathCopyCopyExplorerCommand.1 = s 'PathCopyCopyExplorerCommand Class'
+	{
+		CLSID = s '{E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1}'
+	}
+	PathCopyCopy.PathCopyCopyExplorerCommand = s 'PathCopyCopyExplorerCommand Class'
+	{
+		CLSID = s '{E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1}'
+		CurVer = s 'PathCopyCopy.PathCopyCopyExplorerCommand.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1} = s 'PathCopyCopyExplorerCommand Class'
+		{
+			ProgID = s 'PathCopyCopy.PathCopyCopyExplorerCommand.1'
+			VersionIndependentProgID = s 'PathCopyCopy.PathCopyCopyExplorerCommand'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{2E3829C9-CB67-4C81-B304-B6FE22816E4C}'
+		}
+	}
+	NoRemove *
+	{
+		NoRemove shell
+		{
+			PathCopyCopy = s 'Path Copy Copy'
+			{
+				val ExplorerCommandHandler = s '{E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1}'
+			}
+		}
+	}
+	NoRemove Directory
+	{
+		NoRemove shell
+		{
+			PathCopyCopy = s 'Path Copy Copy'
+			{
+				val ExplorerCommandHandler = s '{E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1}'
+			}
+		}
+		NoRemove Background
+		{
+			NoRemove shell
+			{
+				PathCopyCopy = s 'Path Copy Copy'
+				{
+					val ExplorerCommandHandler = s '{E16C019E-8B4E-4F4D-9C3A-F5F7D8E9B2A1}'
+				}
+			}
+		}
+	}
+}
