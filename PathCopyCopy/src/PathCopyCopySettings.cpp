@@ -82,6 +82,9 @@ namespace
     const wchar_t* const    SETTING_LAST_UPDATE_CHECK                       = L"LastUpdateCheck";
     const wchar_t* const    SETTING_UPDATE_INTERVAL                         = L"UpdateInterval";
     const wchar_t* const    SETTING_DISABLE_SOFTWARE_UPDATE                 = L"DisableSoftwareUpdate";
+    const wchar_t* const    SETTING_WINDOWS11_MENU_ENABLED                  = L"Windows11MenuEnabled";
+    const wchar_t* const    SETTING_WINDOWS11_QUICK_PLUGIN                  = L"Windows11QuickPlugin";
+    const wchar_t* const    SETTING_WINDOWS11_SUBMENU_PLUGINS               = L"Windows11SubmenuPlugins";
 
     // Deprecated PCC setting values. Used for revising.
     const wchar_t* const    OLD_SETTING_DISABLED_PLUGINS                    = L"DisabledPlugins";
@@ -119,6 +122,7 @@ namespace
     const wchar_t* const    SETTING_WSL_PATH_PREFIX_DEFAULT                 = L"/mnt";
     constexpr double        SETTING_UPDATE_INTERVAL_DEFAULT                 = 86400.0;      // One day, in seconds.
     constexpr bool          SETTING_DISABLE_SOFTWARE_UPDATE_DEFAULT         = false;
+    constexpr bool          SETTING_WINDOWS11_MENU_ENABLED_DEFAULT          = false;
 
     // Constants used to parse data.
     constexpr wchar_t       PLUGINS_SEPARATOR                               = L',';
@@ -795,6 +799,119 @@ namespace PCC
         }
 
         return resultingIconFile;
+    }
+
+    //
+    // Checks whether Windows 11 modern context menu integration is enabled.
+    //
+    // @return true if Windows 11 menu is enabled, false otherwise.
+    //
+    bool Settings::GetWindows11MenuEnabled() const
+    {
+        // Perform late-revising.
+        Revise();
+
+        // Check if value exists. If so, read it, otherwise use default value.
+        bool enabled = SETTING_WINDOWS11_MENU_ENABLED_DEFAULT;
+        DWORD regEnabled = 0;
+        if (m_UserKey.QueryDWORDValue(SETTING_WINDOWS11_MENU_ENABLED, regEnabled) == ERROR_SUCCESS) {
+            enabled = regEnabled != 0;
+        }
+        return enabled;
+    }
+
+    //
+    // Sets whether Windows 11 modern context menu integration is enabled.
+    //
+    // @param p_Enabled true to enable Windows 11 menu, false to disable.
+    //
+    void Settings::SetWindows11MenuEnabled(const bool p_Enabled)
+    {
+        // Perform late-revising.
+        Revise();
+
+        m_UserKey.SetDWORDValue(SETTING_WINDOWS11_MENU_ENABLED, p_Enabled ? 1 : 0);
+    }
+
+    //
+    // Returns the plugin to use as a quick access plugin in Windows 11 modern menu.
+    //
+    // @param p_rPluginId Upon return, will contain the ID of the quick plugin.
+    //                    If the method returns false, this is untouched.
+    // @return true if we have a Windows 11 quick plugin and its ID was copied
+    //         in p_rPluginId.
+    //
+    bool Settings::GetWindows11QuickPlugin(GUID& p_rPluginId) const
+    {
+        // Perform late-revising.
+        Revise();
+
+        bool hasPluginId = false;
+        std::wstring pluginAsString;
+        if (PluginUtils::ReadRegistryStringValue(m_UserKey, SETTING_WINDOWS11_QUICK_PLUGIN, pluginAsString) == ERROR_SUCCESS) {
+            GUIDV vPluginIds = PluginUtils::StringToPluginIds(pluginAsString, PLUGINS_SEPARATOR);
+            if (vPluginIds.size() == 1) {
+                p_rPluginId = vPluginIds.front();
+                hasPluginId = true;
+            }
+        }
+        return hasPluginId;
+    }
+
+    //
+    // Sets the plugin to use as a quick access plugin in Windows 11 modern menu.
+    //
+    // @param p_PluginId ID of the plugin to use as quick access.
+    //
+    void Settings::SetWindows11QuickPlugin(const GUID& p_PluginId)
+    {
+        // Perform late-revising.
+        Revise();
+
+        // Convert GUID to string and store it.
+        GUIDV vPluginIds;
+        vPluginIds.push_back(p_PluginId);
+        const std::wstring pluginAsString = PluginUtils::PluginIdsToString(vPluginIds, PLUGINS_SEPARATOR);
+        PluginUtils::SetRegistryStringValue(m_UserKey, SETTING_WINDOWS11_QUICK_PLUGIN, pluginAsString);
+    }
+
+    //
+    // Returns the list of plugins to display in Windows 11 modern menu submenu.
+    //
+    // @param p_rvPluginIds Upon return, will contain a list of plugin IDs.
+    //                      If the method returns false, this list is untouched.
+    // @return true if there was a Windows 11 submenu plugin list in the settings and it
+    //         was copied to p_rvPluginIds.
+    //
+    bool Settings::GetWindows11SubmenuPlugins(GUIDV& p_rvPluginIds) const
+    {
+        // Perform late-revising.
+        Revise();
+
+        std::wstring pluginsAsString;
+        const bool hasValues = PluginUtils::ReadRegistryStringValue(m_UserKey, SETTING_WINDOWS11_SUBMENU_PLUGINS, pluginsAsString) == ERROR_SUCCESS;
+        if (hasValues) {
+            p_rvPluginIds.clear();
+            if (!pluginsAsString.empty()) {
+                p_rvPluginIds = PluginUtils::StringToPluginIds(pluginsAsString, PLUGINS_SEPARATOR);
+            }
+        }
+        return hasValues;
+    }
+
+    //
+    // Sets the list of plugins to display in Windows 11 modern menu submenu.
+    //
+    // @param p_vPluginIds List of plugin IDs to display in submenu.
+    //
+    void Settings::SetWindows11SubmenuPlugins(const GUIDV& p_vPluginIds)
+    {
+        // Perform late-revising.
+        Revise();
+
+        // Convert plugin IDs to string and store it.
+        const std::wstring pluginsAsString = PluginUtils::PluginIdsToString(p_vPluginIds, PLUGINS_SEPARATOR);
+        PluginUtils::SetRegistryStringValue(m_UserKey, SETTING_WINDOWS11_SUBMENU_PLUGINS, pluginsAsString);
     }
 
     //
