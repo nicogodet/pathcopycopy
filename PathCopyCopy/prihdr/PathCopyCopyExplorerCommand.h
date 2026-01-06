@@ -107,8 +107,7 @@ public:
     STDMETHOD(GetFlags)(EXPCMDFLAGS* p_pFlags);
     STDMETHOD(EnumSubCommands)(IEnumExplorerCommand** p_ppEnum);
 
-    // IExplorerCommandState methods
-    STDMETHOD(GetState)(IShellItemArray* p_psiItemArray, BOOL p_fOkToBeSlow, EXPCMDSTATE* p_pCmdState);
+    // IExplorerCommandState methods - uses same GetState as IExplorerCommand
 
     // IInitializeCommand methods
     STDMETHOD(Initialize)(PCWSTR p_pszCommandName, IPropertyBag* p_ppb);

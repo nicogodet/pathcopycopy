@@ -59,14 +59,29 @@ private void LoadWindows11Settings()
     {
         // Find and select the plugin in combo box
         var quickPluginId = UserSettings.Windows11QuickPlugin.Value;
-        // TODO: Set Windows11QuickPluginCbo.SelectedItem
+        var matchingItem = Windows11QuickPluginCbo.Items.Cast<PluginDisplayInfo>()
+            .FirstOrDefault(p => p.Plugin.Id == quickPluginId);
+        if (matchingItem != null)
+        {
+            Windows11QuickPluginCbo.SelectedItem = matchingItem;
+        }
+    }
+    else
+    {
+        // Select "(None)" option
+        Windows11QuickPluginCbo.SelectedIndex = 0;
     }
     
     // Load submenu plugins setting
     var submenuPlugins = UserSettings.Windows11SubmenuPlugins;
     if (submenuPlugins != null)
     {
-        // TODO: Set checked items in Windows11SubmenuPluginsChkList
+        foreach (var item in Windows11SubmenuPluginsChkList.Items.Cast<PluginDisplayInfo>())
+        {
+            var isChecked = submenuPlugins.Contains(item.Plugin.Id);
+            var index = Windows11SubmenuPluginsChkList.Items.IndexOf(item);
+            Windows11SubmenuPluginsChkList.SetItemChecked(index, isChecked);
+        }
     }
 }
 
@@ -76,10 +91,14 @@ private void SaveWindows11Settings()
     UserSettings.Windows11MenuEnabled = Windows11MenuEnabledChk.Checked;
     
     // Save quick plugin setting
-    // TODO: Get selected item from Windows11QuickPluginCbo
+    var selectedPlugin = Windows11QuickPluginCbo.SelectedItem as PluginDisplayInfo;
+    UserSettings.Windows11QuickPlugin = selectedPlugin?.Plugin.Id;
     
     // Save submenu plugins setting
-    // TODO: Get checked items from Windows11SubmenuPluginsChkList
+    var checkedPlugins = Windows11SubmenuPluginsChkList.CheckedItems.Cast<PluginDisplayInfo>()
+        .Select(p => p.Plugin.Id)
+        .ToList();
+    UserSettings.Windows11SubmenuPlugins = checkedPlugins.Count > 0 ? checkedPlugins : null;
 }
 ```
 

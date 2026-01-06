@@ -532,25 +532,6 @@ STDMETHODIMP CPathCopyCopyExplorerCommand::EnumSubCommands(
 }
 
 //
-// IExplorerCommandState::GetState
-//
-// Returns the state of the command (duplicate method for IExplorerCommandState).
-//
-// @param p_psiItemArray Shell item array.
-// @param p_fOkToBeSlow Whether it's OK to take time to compute state.
-// @param p_pCmdState Receives the command state.
-// @return S_OK if successful, otherwise an error code.
-//
-STDMETHODIMP CPathCopyCopyExplorerCommand::GetState(
-    IShellItemArray* p_psiItemArray,
-    BOOL p_fOkToBeSlow,
-    EXPCMDSTATE* p_pCmdState)
-{
-    // Forward to IExplorerCommand::GetState.
-    return GetState(p_psiItemArray, p_fOkToBeSlow, p_pCmdState);
-}
-
-//
 // IInitializeCommand::Initialize
 //
 // Initializes the command with its name.
@@ -703,8 +684,15 @@ STDMETHODIMP CPathCopyCopyExplorerCommand::Next(
 STDMETHODIMP CPathCopyCopyExplorerCommand::Skip(
     ULONG p_celt)
 {
+    // Check for overflow before adding
+    if (m_EnumIndex > ULONG_MAX - p_celt) {
+        // Would overflow, just move to end
+        m_EnumIndex = gsl::narrow<ULONG>(m_vspSubmenuPlugins.size());
+        return S_FALSE;
+    }
+    
     m_EnumIndex += p_celt;
-    return (m_EnumIndex <= m_vspSubmenuPlugins.size()) ? S_OK : S_FALSE;
+    return (m_EnumIndex < m_vspSubmenuPlugins.size()) ? S_OK : S_FALSE;
 }
 
 //
