@@ -98,6 +98,8 @@ IDR_PATHCOPYCOPY        REGISTRY                "PathCopyCopy.rgs"
 
 IDR_PATHCOPYCOPYCONTEXTMENUEXT REGISTRY                "PathCopyCopyContextMenuExt.rgs"
 
+IDR_PATHCOPYCOPYEXPLORERCOMMAND REGISTRY                "PathCopyCopyExplorerCommand.rgs"
+
 IDR_PATHCOPYCOPYDATAHANDLER REGISTRY                "PathCopyCopyDataHandler.rgs"
 
 IDR_PATHCOPYCOPYCONFIGHELPER REGISTRY                "PathCopyCopyConfigHelper.rgs"

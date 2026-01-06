@@ -52,6 +52,9 @@
     <ClCompile Include="src\PathCopyCopyContextMenuExt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PathCopyCopyExplorerCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\PathCopyCopyDataHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -204,6 +207,9 @@
     <None Include="rsrc\PathCopyCopyContextMenuExt.rgs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="rsrc\PathCopyCopyExplorerCommand.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="rsrc\PathCopyCopyDataHandler.rgs">
       <Filter>Resource Files</Filter>
     </None>
@@ -227,6 +233,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="prihdr\PathCopyCopyContextMenuExt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="prihdr\PathCopyCopyExplorerCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="prihdr\PathCopyCopyDataHandler.h">
