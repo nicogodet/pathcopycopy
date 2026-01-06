@@ -126,6 +126,15 @@ namespace PathCopyCopy.Settings.Core
         /// Name of registry value containing the ID of the plugin to activate when Ctrl key is held down.
         private const string CtrlKeyPluginValueName = "CtrlKeyPlugin";
 
+        /// Name of registry value determining whether Windows 11 modern menu integration is enabled.
+        private const string Windows11MenuEnabledValueName = "Windows11MenuEnabled";
+
+        /// Name of registry value containing the ID of the plugin for Windows 11 quick access.
+        private const string Windows11QuickPluginValueName = "Windows11QuickPlugin";
+
+        /// Name of registry value containing the plugins to display in Windows 11 submenu.
+        private const string Windows11SubmenuPluginsValueName = "Windows11SubmenuPlugins";
+
         /// Name of registry value containing the plugins to display in the main menu, in order.
         private const string MainMenuDisplayOrderValueName = "MainMenuDisplayOrder";
 
@@ -250,6 +259,9 @@ namespace PathCopyCopy.Settings.Core
 
         /// Default value of the "disable software update" setting.
         private const int DisableSoftwareUpdateDefaultValue = 0;
+
+        /// Default value of the "Windows 11 menu enabled" setting.
+        private const int Windows11MenuEnabledDefaultValue = 0;
 
         /// Default value of the "install source" setting.
         private const string InstallSourceDefaultValue = "Inno";
@@ -634,6 +646,63 @@ namespace PathCopyCopy.Settings.Core
                 } else {
                     // Delete the value in the registry instead.
                     userKey.DeleteValue(KnownPluginsValueName, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether Windows 11 modern context menu integration is enabled.
+        /// </summary>
+        public bool Windows11MenuEnabled
+        {
+            get {
+                return ((int) GetUserOrGlobalValue(Windows11MenuEnabledValueName, Windows11MenuEnabledDefaultValue)) != 0;
+            }
+            set {
+                userKey.SetValue(Windows11MenuEnabledValueName, value ? 1 : 0);
+            }
+        }
+
+        /// <summary>
+        /// ID of plugin to show as quick access in Windows 11 modern menu.
+        /// Will return <c>null</c> if not set.
+        /// </summary>
+        public Guid? Windows11QuickPlugin
+        {
+            get {
+                var pluginIds = LoadPluginsFromValue(Windows11QuickPluginValueName, false);
+                Guid? pluginId = null;
+                if (pluginIds.Count == 1) {
+                    pluginId = pluginIds[0];
+                }
+                return pluginId;
+            }
+            set {
+                if (value.HasValue) {
+                    List<Guid> pluginIds = new List<Guid> { value.Value };
+                    SavePluginsInValue(Windows11QuickPluginValueName, pluginIds);
+                } else {
+                    // Delete the value in the registry instead.
+                    userKey.DeleteValue(Windows11QuickPluginValueName, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// List of plugins to display in Windows 11 modern menu submenu, in order.
+        /// Will return <c>null</c> if not set.
+        /// </summary>
+        public List<Guid> Windows11SubmenuPlugins
+        {
+            get {
+                return LoadPluginsFromValue(Windows11SubmenuPluginsValueName, true);
+            }
+            set {
+                if (value != null) {
+                    SavePluginsInValue(Windows11SubmenuPluginsValueName, value);
+                } else {
+                    // Delete the value in the registry instead.
+                    userKey.DeleteValue(Windows11SubmenuPluginsValueName, false);
                 }
             }
         }
